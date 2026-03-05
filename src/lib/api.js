@@ -1,0 +1,49 @@
+// Determine if we're in development mode (localhost)
+const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+// Use local server in development, external API in production
+const API_BASE_URL = isLocalhost 
+    ? 'http://localhost:5000/api' 
+    : (import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api');
+
+async function fetchJson(endpoint, options = {}) {
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+        ...options,
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            ...(options.headers || {})
+        }
+    });
+
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({ message: response.statusText }));
+        throw new Error(error.message || `API Error: ${response.status}`);
+    }
+
+    return response.json();
+}
+
+// Helper for legacy hooks and direct calls
+export async function fetchApi(endpoint, options = {}) {
+    return fetchJson(endpoint, options);
+}
+
+export const api = {
+    // Articles
+    getArticles: (params = '') => fetchJson(`/articles${params}`),
+    getArticle: (id) => fetchJson(`/articles/${id}`),
+    getFeaturedArticles: () => fetchJson('/articles/featured'),
+
+    // Ads
+    getAds: () => fetchJson('/ads'),
+
+    // Categories
+    getCategories: () => fetchJson('/categories/full'),
+    getSubcategories: (catId) => fetchJson(`/categories/${catId}/subcategories`),
+
+    // Helper for direct raw fetch if needed
+    fetchRaw: (endpoint) => fetchJson(endpoint)
+};
+
+export default api;
