@@ -68,7 +68,7 @@ export const DummyAd = ({
 
     // Handle relative paths for local uploads
     if (adImage && !adImage.startsWith('http') && !adImage.startsWith('data:')) {
-        const baseUrl = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api').replace(/\/api$/, '');
+        const baseUrl = (import.meta.env.VITE_API_BASE_URL || 'http://korsimnaturals.com/api').replace(/\/api$/, '');
         adImage = `${baseUrl}/${adImage.replace(/\\/g, '/')}`;
     }
 

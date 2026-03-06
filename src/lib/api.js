@@ -3,8 +3,8 @@ const isLocalhost = window.location.hostname === 'localhost' || window.location.
 
 // Use local server in development, external API in production
 const API_BASE_URL = isLocalhost 
-    ? 'http://localhost:5000/api' 
-    : (import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api');
+    ? 'http://korsimnaturals.com/api' 
+    : (import.meta.env.VITE_API_BASE_URL || 'http://korsimnaturals.com/api');
 
 async function fetchJson(endpoint, options = {}) {
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
